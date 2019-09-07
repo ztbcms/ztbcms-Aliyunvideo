@@ -34,6 +34,20 @@ return array(
                 "status" => 1,
                 "name" => "填写阿里云配置",
             ),
+            array(
+                "route" => "Aliyunvideo/VideoDemo/index",
+                "type" => 1,
+                "status" => 1,
+                "name" => "日常使用dumo",
+                "child" => array(
+                    array(
+                        "route" => "Aliyunvideo/VideoDemo/formUpload",
+                        "type" => 1,
+                        "status" => 1,
+                        "name" => "表单上传",
+                    ),
+                )
+            )
         ),
     ),
 );

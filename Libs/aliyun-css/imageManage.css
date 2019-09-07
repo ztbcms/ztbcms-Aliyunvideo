@@ -1,0 +1,82 @@
+.btn-block{
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background-color: #fff;
+    border-bottom: 1px solid #ececec ;
+    border-right: 1px solid #ececec ;
+}
+.btn-block1{
+    background-color: #e8e6e6;
+}
+.btn-block:hover{
+    background-color: #e8e6e6;
+}
+.imgListItme:hover  .el-icon-error{
+    display: block;
+}
+.el-icon-error{
+    display: none;
+}
+
+.aside-bottom{
+    position: absolute;
+    bottom:10px;
+}
+
+/* 页面架构 */
+body {
+    margin: 0;
+}
+
+.footer {
+    margin-top: 10px;
+    margin-right: 16px;
+    float: right;
+}
+
+}
+/* 上传图片    */
+.thumb-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.thumb-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.el-upload__input {
+    display: none !important;
+}
+
+/* 上传图片    */
+
+/*图库*/
+.imgListItme {
+    width: 142px;
+    height: 142px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    display: inline-flex;
+    margin-right: 20px;
+    margin-bottom: 15px;
+    position: relative;
+    cursor: pointer;
+    vertical-align: top;
+}
+
+.is_check {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 142px;
+    height: 142px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 40px;
+}

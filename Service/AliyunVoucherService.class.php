@@ -26,7 +26,7 @@ class AliyunVoucherService extends BaseService
      */
     static function getVideoList($where, $order, $page, $limit)
     {
-        $res = self::select('Aliyunvideo/VideoDetails', $where, $order, $page, $limit);
+        $res = self::select('Aliyunvideo/VideoDetails',$where,$order,$page,$limit);
         $items = $res['data']['items'];
         foreach ($items as &$v) {
             $v['add_time_name'] = date("Y-m-d H:i",$v['add_time']);

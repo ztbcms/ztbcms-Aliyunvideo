@@ -70,5 +70,13 @@ class VideoDemoController extends AdminBase
         $this->ajaxReturn($res);
     }
 
+    /**
+     * 表单上传dumo
+     */
+    public function formUpload(){
+        $this->display();
+    }
+
+
 
 }
