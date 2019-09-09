@@ -33,8 +33,6 @@
                 </el-col>
                 <el-col :span="16"><div class="grid-content "></div></el-col>
             </el-row>
-
-
         </el-card>
     </div>
 

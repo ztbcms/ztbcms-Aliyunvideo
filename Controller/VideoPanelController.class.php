@@ -39,7 +39,16 @@ class VideoPanelController extends AdminBase
         $limit = I('limit','','trim');
         $where['is_aliyun'] = '1';
         $where['cover_url'] = ['neq',''];
-        $res = AliyunVoucherService::getVideoList($where,'id desc',$page,$limit);
+        $res = AliyunVoucherService::getVideoList($where,'edit_time desc',$page,$limit);
+        $this->ajaxReturn($res);
+    }
+
+    /**
+     * 删除视频
+     */
+    public function delVideoList(){
+        $id = I('id','','trim');
+        $res = AliyunVoucherService::delVideo($id);
         $this->ajaxReturn($res);
     }
 

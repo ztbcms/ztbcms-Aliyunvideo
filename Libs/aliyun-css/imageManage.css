@@ -35,7 +35,6 @@ body {
     float: right;
 }
 
-}
 /* 上传图片    */
 .thumb-uploader .el-upload {
     border: 1px dashed #d9d9d9;
@@ -55,7 +54,6 @@ body {
 
 /* 上传图片    */
 
-/*图库*/
 .imgListItme {
     width: 142px;
     height: 142px;

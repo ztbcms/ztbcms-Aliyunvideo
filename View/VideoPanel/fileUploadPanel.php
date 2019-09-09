@@ -23,7 +23,7 @@
 
                 <el-container style="flex-wrap：wrap;!important;position: relative">
                     <el-header style="margin-top: 10px;">
-                        <el-button style="float: left;" @click="upload" type="primary">选择视频</el-button>
+                        <el-button style="float: left;" @click="getFilesUpload()" type="primary">选择视频</el-button>
                         <el-button style="float: left;" onclick="jiance();" type="primary">开始上传</el-button>
                         <el-button style="float: left;" type="success" @click="moveToGroup" v-show="start_move">移动至其他分组</el-button>
                         <div style="display: none;width:300px;height:30px;background-color:#ccc;float: left; margin-top: 5px; margin-left: 20px;" id="huitiao">
@@ -38,7 +38,7 @@
                                 <img :src="item.cover_url"  @click="selectImgEvent(index)" style="width:140px;height: 140px;" />
                                 <div style="position: absolute;bottom: 0;background-color: #f0f0f0;width: 142px;text-align: center;overflow: hidden"><span>{{item.filename}}</span>
                                 </div>
-                                <i class="el-icon-error" @click="delimgListItme(item)" ></i>
+                                <i class="el-icon-error" @click="delVideoListItme(item)" ></i>
                                 <div v-if="type >0 ? isSelect ==  item.video_id: item.is_select " class="is_check" @click="selectImgEvent(index)">
                                     <span style="line-height: 142px;" class="el-icon-check"></span>
                                 </div>
@@ -60,7 +60,6 @@
 
                     </el-footer>
                     <div class="footer" style="padding-left:20px;background-color: #fff;margin-top: 10px;height: 66px;border-top:#eee;line-height: 66px; ">
-                        <el-checkbox v-model="check_all" @change="changeCheck" v-show="start_move">全选</el-checkbox>
                         <el-button type="success" @click="start_move = false" v-show="start_move"  style="width: 120px;">取消移动分组</el-button>
                         <el-button type="success" @click="moveGroup" v-show="!start_move" style="width: 120px;">开始移动分组</el-button>
                         <el-button type="primary" @click="confirm">确定</el-button>
@@ -68,10 +67,7 @@
                     </div>
                 </el-container>
             </el-container>
-
         </div>
-
-
     </div>
 
 
@@ -86,69 +82,21 @@
                         total_pages: 0,
                         total_items: 0
                     },
-                    galleryList: [], //图库
-                    cate_id:"{$_GET['cate_id']}",
-
-
-                    isIndeterminate:true,
-                    checkAll: false,
-                    checkedCities: ['上海', '北京'],
-                    type:2,
-                    isSelect:'',
-                    activeName: 'uploadLocal',
-                    uploadConfig: {
-                        uploadUrl: "{:U('Video/UploadAdminApi/uploadImage')}",
-                        max_upload: 6,//同时上传文件数
-                        accept: 'image/*' //接收的文件类型，请看：https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-accept
-                    },
-                    uploadedLocalFileList: [], //本地上传的文件
-                    form: {
-                        search_date: [],
-                        uid: '',
-                        ip: '',
-                        start_time: '',
-                        end_time: '',
-                        status: '',
-                        sort_time: '',//排序：时间
-                    },
-                    orgin_type:0,
-                    check_all:false,
-                    selectedCate:'',
-                    cate_list:[],
-                    start_move:false
+                    galleryList : [], //视频列表
+                    cate_id : "{$_GET['cate_id']}",
+                    type : 1, //进入的类型
+                    isSelect:'', //选择的视频
+                    orgin_type : 1, //选择进入的类型
+                    selectedCate:'', //分类的分组
+                    cate_list:[],  //分类列表
+                    start_move:false  //是否显示分类分组
                 },
                 watch: {},
-                computed: {
-                    selectdImageList: function () {
-                        var result = [];
-                        if (this.activeName == 'uploadLocal') {
-                            this.uploadedLocalFileList.forEach(function (file) {
-                                result.push({
-                                    url: file.url,
-                                    name: file.name
-                                })
-                            })
-                        }
-
-                        if (this.activeName == 'gallery') {
-                            this.galleryList.forEach(function (file) {
-                                if (file.is_select) {
-                                    result.push({
-                                        url: file.url,
-                                        name: file.name
-                                    })
-                                }
-                            })
-                        }
-
-                        return result;
-                    }
-                },
-                filters: {
-
-                },
+                computed: {},
+                filters: {},
                 methods: {
                     getGroupList: function () {
+                        //获取分组列表
                         var that = this;
                         $.ajax({
                             url: "{:U('VideoGroup/getGroupList')}",
@@ -162,24 +110,18 @@
                                     var data = res.data;
                                     that.cate_list = data.videoGroupList;
                                 }
-                                that.cate_id = data.videoGroupList[0]['id'];
+                                if(!that.cate_id)  that.cate_id = data.videoGroupList[0]['id'];
                                 that.getGalleryList();
-
-
-
-//                                that.pagination.page = data.page;
-//                                that.pagination.limit = data.limit;
-//                                that.pagination.total_pages = data.total_pages;
-//                                that.pagination.total_items = data.total_items;
-//                                var list = [];
-//                                data.items.video_list.map(function (item) {
-//                                    item.is_select = false;
-//                                    list.push(item);
-//                                });
-//                                that.galleryList = list
                             }
                         })
-                    }, addGroup: function () {
+                    },
+                    getFilesUpload:function(){
+                        //选择视频
+                        var that = this;
+                        var files = $('#files');
+                        files.trigger('click');
+                    },
+                    addGroup: function () {
                         var that = this;
                         layer.open({
                             type: 2,
@@ -222,6 +164,7 @@
                             })
                         })
                     } , getGalleryList: function () {
+                        //获取视频的列表
                         var that = this;
                         var where = {
                             page: that.pagination.page,
@@ -245,98 +188,35 @@
                                     item.is_select = false;
                                     list.push(item);
                                 });
-                                that.check_all = false;
                                 that.galleryList = list
                             }
                         })
-                    },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    moveGroup: function () {
+                    },moveGroup: function () {
+                        //分组移动切换
                         this.start_move = true;
                         this.type = 2;
-                    },
-                    moveToGroup:function(){
+                    },moveToGroup:function(){
+                        //选择需要移动分组
                         var that = this;
-
                         var arr = [];
                         that.galleryList.forEach(function (item,index) {
                             if(item.is_select){
                                 arr.push(item);
                             }
                         });
-
                         if(arr.length == 0){
-                            layer.msg('请选择要移动的视频');return;
+                            layer.msg('请选择要移动的视频');
+                            return;
                         }
                         layer.open({
                             type: 2,
                             title: '移动至其它分组',
-                            content: "{:U('Video/UploadVideo/selectGroup')}",
-                            area: ['50%', '40%'],
+                            content: "{:U('VideoGroup/selectGroup')}",
+                            area: ['380px;', '240px']
                         })
-                    },
-                    selectCate: function (index,item) {
-                        var that = this;
-                        that.selectedCate = index;
-                        that.cate_id = item.id;
-                        that.getGalleryList();
-                    },
-                    changeCheck: function(){
-                        var that = this;
-                        that.galleryList.forEach(function(item,index){
-                            item.is_select = that.check_all;
-                        })
-                    },
-                    delimgListItme: function (item) {
-                        var that = this;
-                        layer.confirm('确认删除吗？',{btn:['确认','取消']}, function () {
-                            $.ajax({
-                                url: "{:U('Video/UploadVideo/delVideoListItem')}",
-                                data: {video_id:item.id},
-                                dataType: 'json',
-                                type: 'post',
-                                success: function (res) {
-                                    that.getGalleryList();
-                                    that.closePanel();
-                                    that.type = that.orgin_type;
-                                    that.start_move= false;
-                                    that.check_all= false;
-                                }
-                            })
-                        })
-                    },
-                    handleRemove: function () {
-
-                    }, handleUploadSuccess: function (response, file, fileList) {
-                        console.log(response)
-                        if (response.status) {
-                            this.uploadedLocalFileList.push({
-                                name: response.data.name,
-                                url: response.data.url,
-                            })
-                        }
-                    },
-                    handleUploadError: function () {
-                        ELEMENT.Message.error('上传失败');
                     },
                     moveToOrderGroups: function (event) {
+                        //执行分组切换的功能
                         var that = this;
                         cate_id = event.detail.files;
                         var arr = [];
@@ -346,22 +226,47 @@
                             }
                         });
                         $.ajax({
-                            url: "{:U('Video/UploadVideo/moveVideosToGroup')}",
-                            data: {cate_id:cate_id,arr:arr},
-                            dataType: 'json',
+                            url: "{:U('VideoGroup/moveVideosToGroup')}",
+                            data: {
+                                cate_id : cate_id, //分组id
+                                arr : arr //列表
+                            }, dataType: 'json',
                             type: 'post',
                             success: function (res) {
-                                that.getGalleryList();
+                                that.getGalleryList();  //视频列表
                                 that.type = that.orgin_type;
                                 that.start_move = false;
-                                that.check_all = false;
                             }
                         })
                     },
-                    handleExceed: function(){
-                        ELEMENT.Message.error('上传文件数量超限制');
+                    selectCate: function (index,item) {
+                        //切换分组的点击效果
+                        var that = this;
+                        that.selectedCate = index;
+                        that.cate_id = item.id;
+                        that.getGalleryList();
+                    },
+                    delVideoListItme: function (item) {
+                        var that = this;
+                        layer.confirm('确认删除吗？',{btn:['确认','取消']}, function () {
+                            $.ajax({
+                                url: "{:U('VideoPanel/delVideoList')}",
+                                data: {
+                                    id:item.id
+                                },
+                                dataType: 'json',
+                                type: 'post',
+                                success: function (res) {
+                                    that.getGalleryList();
+                                    that.closePanel();
+                                    that.type = that.orgin_type;
+                                    that.start_move= false;
+                                }
+                            })
+                        })
                     },
                     selectImgEvent: function (index) {
+                        //点击选中的视频
                         this.galleryList[index]['is_select'] = true;
                         this.isSelect = this.galleryList[index].video_id;
                     },
@@ -369,34 +274,7 @@
                         var that= this;
                         files = that.isSelect;
                         if(that.type == 1){
-                            event = new CustomEvent('ZTBCMS_UPLOAD_VIDEO', {
-                                detail: {
-                                    files: files
-                                }
-                            });
-                        }else if(that.type == 2){
-                            event = new CustomEvent('ZTBCMS_UPLOAD_CONTENT_VIDEO', {
-                                detail: {
-                                    files: files,
-//                                type: that.type,
-//                                itemIndex : that.itemIndex,
-//                                content:that.content,
-                                }
-                            });
-                        } else if(that.type == 3){
-                            event = new CustomEvent('ZTBCMS_UPLOAD_INSTALL_VIDEO', {
-                                detail: {
-                                    files: files
-                                }
-                            });
-                        }  else if(that.type == 4){
-                            event = new CustomEvent('ZTBCMS_UPLOAD_USE_VIDEO', {
-                                detail: {
-                                    files: files
-                                }
-                            });
-                        }  else if(that.type == 5){
-                            event = new CustomEvent('ZTBCMS_UPLOAD_SELECTION_VIDEO', {
+                            event = new CustomEvent('ZTBCMS_ALIYUNVIDEO_VIDEO_FILE', {
                                 detail: {
                                     files: files
                                 }
@@ -412,17 +290,16 @@
                             window.close();
                         }
                     }
-
                 },
                 mounted: function () {
-
-                    this.getGroupList();
+                    //触发分组的效果
                     window.addEventListener('MOVE_GROUP', this.moveToOrderGroups.bind(this));
-                    this.uploadConfig.max_upload = parseInt(this.getUrlQuery('max_upload') || this.uploadConfig.max_upload);
+                    //获取视频的列表
+                    this.getGroupList();
+                    //获取进入的类型
                     this.type = parseInt(this.getUrlQuery('type'));
+                    //获取进入的类型
                     this.orgin_type = parseInt(this.getUrlQuery('type'));
-                    this.content = this.getUrlQuery('content');
-                    this.itemIndex = this.getUrlQuery('itemIndex');
                 }
             })
         })
