@@ -389,7 +389,7 @@
             'onUploadSucceed': function (uploadInfo) {
                 setTimeout(function () {
                     onUploadSucceed(uploadInfo.videoId);
-                }, 2000);
+                }, 1000);
             },
             // 文件上传进度
             'onUploadProgress': function (uploadInfo, totalSize, loadedPercent) {
@@ -446,7 +446,7 @@
                         $("#numPercentage").text(global_num);
                         global_num = global_num + 3;
                         onUploadSucceed(video_id);
-                    }, 2000);
+                    }, 1000);
                 }
             });
         }
