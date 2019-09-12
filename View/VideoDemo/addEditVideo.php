@@ -33,8 +33,6 @@
                 </el-col>
                 <el-col :span="16"><div class="grid-content "></div></el-col>
             </el-row>
-
-
         </el-card>
     </div>
 
@@ -81,7 +79,7 @@
                         if(f.length == 0) return;
                         $('#callback').css('display','block');
                         layer.msg('已选择好文件,请点击上传');
-                    },getAliyunUploadVoucher:function () {
+                    } ,getAliyunUploadVoucher:function () {
                         var that = this;
                         var f = document.getElementById("files").files;
                         $("#callback").css('display','block');

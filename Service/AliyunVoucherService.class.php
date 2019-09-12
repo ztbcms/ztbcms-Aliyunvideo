@@ -26,7 +26,7 @@ class AliyunVoucherService extends BaseService
      */
     static function getVideoList($where, $order, $page, $limit)
     {
-        $res = self::select('Aliyunvideo/VideoDetails', $where, $order, $page, $limit);
+        $res = self::select('Aliyunvideo/VideoDetails',$where,$order,$page,$limit);
         $items = $res['data']['items'];
         foreach ($items as &$v) {
             $v['add_time_name'] = date("Y-m-d H:i",$v['add_time']);
@@ -40,6 +40,15 @@ class AliyunVoucherService extends BaseService
         }
         $res['data']['items'] = $items;
         return $res;
+    }
+
+    /**视频删除
+     * @param $id
+     */
+    static function delVideo($id){
+        if(!$id) return createReturn(false, '', '凭证不能为空');
+        D('Aliyunvideo/VideoDetails')->where(['id'=>$id])->delete();
+        return createReturn(true, '', '删除成功');
     }
 
     /**
@@ -60,7 +69,7 @@ class AliyunVoucherService extends BaseService
      * @param $name
      * @return array
      */
-    static function aliyunUploadVoucher($title, $name)
+    static function aliyunUploadVoucher($title, $name,$group_id = 0)
     {
         $videoConfFind = VideoConfService::getVideoConfFind()['data']['videoConfFind'];
         $accessKeyId = $videoConfFind['accesskey_id'];
@@ -69,7 +78,7 @@ class AliyunVoucherService extends BaseService
         if (!$title) return createReturn(false, '', '视频文件标题不能为空');
         if (!$name) return createReturn(false, '', '视频名称不能为空');
         $regionId = 'cn-shanghai';
-        $profile = \DefaultProfile::getProfile($regionId, 'LTAI0JsVsBEg9lTA', 's2gAgRDt0vTURLwMfl4M0WC6MTnlVS');
+        $profile = \DefaultProfile::getProfile($regionId, $accessKeyId, $accessKeySecret);
         $client = new \DefaultAcsClient($profile);
         $request = new vod\CreateUploadVideoRequest();
         $videoDetailsTable = new VideoDetailsModel();
@@ -100,6 +109,7 @@ class AliyunVoucherService extends BaseService
             $videoDetailsAdd['add_time'] = time();
             $videoDetailsAdd['edit_time'] = time();
             $videoDetailsAdd['is_aliyun'] = VideoDetailsModel::ALIYUN_NO;
+            $videoDetailsAdd['group_id'] = $group_id;
             $videoId = $videoDetailsTable->add($videoDetailsAdd);
             if ($videoId) {
                 $res = self::aliyunVideoFind($response->VideoId)['data']['videoDetailsFind'];
@@ -127,6 +137,11 @@ class AliyunVoucherService extends BaseService
         $videoValidTime = $videoConfFind['video_valid_time'];
 
         if (!$accessKeyId || !$accessKeySecret) return createReturn(false, '', '配置信息未设置');
+
+        $videoDetailsFind = $oldVideoFind = self::aliyunVideoFind($videoId)['data']['videoDetailsFind'];
+        if($videoDetailsFind['expire_time'] > time() - 86400){
+            return createReturn(true, $videoDetailsFind, '获取凭证成功');
+        }
 
         $regionId = 'cn-shanghai';
         $profile = \DefaultProfile::getProfile($regionId, $accessKeyId, $accessKeySecret);
@@ -170,7 +185,19 @@ class AliyunVoucherService extends BaseService
             //处理
             return createReturn(false, '', '获取视频失败');
         }
+    }
 
+
+    /**
+     * 更新视频
+     */
+    static function updatinOverdueVideo(){
+        $videoDetailsTable = new VideoDetailsModel();
+        $where['expire_time'] = ['lt',time() - 86400];
+        $videoList = $videoDetailsTable->where($where)->select();
+        foreach ($videoList as $k => $v){
+            self::aliyunVideoPlay($v['video_id']);
+        }
     }
 
 }

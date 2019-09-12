@@ -1,5 +1,9 @@
 ## 阿里云视频点播
 
+获取视频详情： Aliyunvideo/VideoPanel/getVideoDetails 方法参数video_id
+(建议直接调用此方法获取详情，直接使用视频url会遇到视频过期问题)
+
+
 实际使用建议在有效期前两个小时更新视频路径
 
 视频点播报错可参考 https://error-center.aliyun.com/status/product/vod 以下网址
