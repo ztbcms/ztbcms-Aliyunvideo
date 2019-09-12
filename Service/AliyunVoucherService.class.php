@@ -78,7 +78,7 @@ class AliyunVoucherService extends BaseService
         if (!$title) return createReturn(false, '', '视频文件标题不能为空');
         if (!$name) return createReturn(false, '', '视频名称不能为空');
         $regionId = 'cn-shanghai';
-        $profile = \DefaultProfile::getProfile($regionId, 'LTAI0JsVsBEg9lTA', 's2gAgRDt0vTURLwMfl4M0WC6MTnlVS');
+        $profile = \DefaultProfile::getProfile($regionId, $accessKeyId, $accessKeySecret);
         $client = new \DefaultAcsClient($profile);
         $request = new vod\CreateUploadVideoRequest();
         $videoDetailsTable = new VideoDetailsModel();

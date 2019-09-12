@@ -38,10 +38,11 @@ CREATE TABLE `cms_aliyunvideo_video`  (
   `upload_address` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `request_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `sort` int(15) NULL DEFAULT NULL COMMENT '排序',
+  `group_id` int(15) NULL DEFAULT NULL COMMENT '分类id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `video_id`(`video_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
