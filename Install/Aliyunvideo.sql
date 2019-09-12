@@ -39,6 +39,7 @@ CREATE TABLE `cms_aliyunvideo_video`  (
   `request_id` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `sort` int(15) NULL DEFAULT NULL COMMENT '排序',
   `group_id` int(15) NULL DEFAULT NULL COMMENT '分类id',
+  `is_delete` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `video_id`(`video_id`) USING BTREE
