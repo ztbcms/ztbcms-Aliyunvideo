@@ -57,7 +57,8 @@ class VideoDemoController extends AdminBase
     public function aliyunUploadVoucher(){
         $title = I('title','','trim');
         $name = I('name','','trim');
-        $res = AliyunVoucherService::aliyunUploadVoucher($title,$name);
+        $group_id = I('group_id','','trim');
+        $res = AliyunVoucherService::aliyunUploadVoucher($title,$name,$group_id);
         $this->ajaxReturn($res);
     }
 

@@ -10,6 +10,7 @@ namespace Aliyunvideo\Controller;
 
 use Common\Controller\AdminBase;
 use Aliyunvideo\Service\AliyunVoucherService;
+use Aliyunvideo\Service\VideoConfService;
 
 /**
  * 视频面板
@@ -23,6 +24,7 @@ class VideoPanelController extends AdminBase
      * 视频上传面板
      */
     public function fileUploadPanel(){
+        AliyunVoucherService::updatinOverdueVideo();
         $jsLink = '/app/Application/Aliyunvideo'.DIRECTORY_SEPARATOR .'Libs'.DIRECTORY_SEPARATOR;
         $this->assign('jsLink',$jsLink);
         $this->display();
@@ -49,6 +51,28 @@ class VideoPanelController extends AdminBase
     public function delVideoList(){
         $id = I('id','','trim');
         $res = AliyunVoucherService::delVideo($id);
+        $this->ajaxReturn($res);
+    }
+
+    /**
+     * 校验是否填写了配置信息
+     */
+    public function checkConf(){
+        $res = VideoConfService::getVideoConfFind();
+        if(!$res['data']['videoConfFind']['accesskey_id'] ||
+            !$res['data']['videoConfFind']['accesskey_secret']){
+            $this->ajaxReturn(self::createReturn(false));
+        } else {
+            $this->ajaxReturn(self::createReturn(true));
+        }
+    }
+
+    /**
+     * 获取视频的详细信息
+     */
+    public function getVideoDetails(){
+        $videoId = I('video_id', '', 'trim');
+        $res = AliyunVoucherService::aliyunVideoPlay($videoId);
         $this->ajaxReturn($res);
     }
 

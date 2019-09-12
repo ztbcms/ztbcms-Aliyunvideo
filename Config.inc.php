@@ -27,7 +27,8 @@ return array(
 	'sign' => 'd04078c5b86475cd5a0c690b9905953d',
 	//依赖模块
     'depend' => array(
-        'Upload'
+        'Upload',
+        'Cron'
     ),
 	//行为注册
 	'tags' => array(),
