@@ -41,6 +41,7 @@ class VideoPanelController extends AdminBase
         $limit = I('limit','','trim');
         $where['is_aliyun'] = '1';
         $where['cover_url'] = ['neq',''];
+        $where['is_delete'] = '0';
         $res = AliyunVoucherService::getVideoList($where,'edit_time desc',$page,$limit);
         $this->ajaxReturn($res);
     }

@@ -47,7 +47,7 @@ class AliyunVoucherService extends BaseService
      */
     static function delVideo($id){
         if(!$id) return createReturn(false, '', '凭证不能为空');
-        D('Aliyunvideo/VideoDetails')->where(['id'=>$id])->delete();
+        D('Aliyunvideo/VideoDetails')->where(['id'=>$id])->save(['is_delete'=>'1']);
         return createReturn(true, '', '删除成功');
     }
 
