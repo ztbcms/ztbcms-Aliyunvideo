@@ -11,6 +11,7 @@ CREATE TABLE `cms_aliyunvideo_conf`  (
   `accesskey_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `accesskey_secret` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `video_valid_time` int(10) NOT NULL COMMENT '视频的有效期',
+  `local_cover` int(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否将图片保存到本地',
   `edit_time` int(15) NOT NULL COMMENT '最后编辑时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
@@ -40,6 +41,7 @@ CREATE TABLE `cms_aliyunvideo_video`  (
   `sort` int(15) NULL DEFAULT NULL COMMENT '排序',
   `group_id` int(15) NULL DEFAULT NULL COMMENT '分类id',
   `is_delete` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否删除',
+  `is_local_cover` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '封面图是否是本地的 （1为是 0为否）',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
   INDEX `video_id`(`video_id`) USING BTREE

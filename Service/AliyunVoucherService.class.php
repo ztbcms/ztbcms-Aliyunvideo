@@ -134,7 +134,8 @@ class AliyunVoucherService extends BaseService
         $videoConfFind = VideoConfService::getVideoConfFind()['data']['videoConfFind'];
         $accessKeyId = $videoConfFind['accesskey_id'];
         $accessKeySecret = $videoConfFind['accesskey_secret'];
-        $videoValidTime = $videoConfFind['video_valid_time'];
+        $videoValidTime = $videoConfFind['video_valid_time']; //有效期
+        $local_cover = $videoConfFind['local_cover']; //是否将图片保存到本地
 
         if (!$accessKeyId || !$accessKeySecret) return createReturn(false, '', '配置信息未设置');
 
@@ -156,8 +157,13 @@ class AliyunVoucherService extends BaseService
             $res = json_encode($res, true);
             $res = json_decode($res, true);
             if ($res['PlayInfoList']['PlayInfo'][0]['PlayURL']) {
-                $coverUrl = picturesDownload($res['VideoBase']['CoverURL'], $videoId . '.jpg', 'CoverUrl');
-
+                if($local_cover){
+                    $coverUrl = picturesDownload($res['VideoBase']['CoverURL'], $videoId . '.jpg', 'CoverUrl');
+                    $videoData['is_local_cover'] = VideoDetailsModel::LOCAL_COVER_YES;
+                } else {
+                    $coverUrl = $res['VideoBase']['CoverURL'];
+                    $videoData['is_local_cover'] = VideoDetailsModel::LOCAL_COVER_NO;
+                }
                 $videoData['is_aliyun'] = '1';
                 $videoData['edit_time'] = time();
                 $videoData['expire_time'] = time() + $videoValidTime * 86400;
@@ -165,7 +171,6 @@ class AliyunVoucherService extends BaseService
                 $videoData['cover_url'] = $coverUrl;
                 $videoData['video_size'] = $res['PlayInfoList']['PlayInfo'][0]['Size'];
                 $videoData['url'] = $res['PlayInfoList']['PlayInfo'][0]['PlayURL'];
-
                 //判断视频是否存在
                 if ($videoDetailsModel->where(['video_id' => $videoId])->count()) {
                     //存在

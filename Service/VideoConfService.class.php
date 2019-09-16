@@ -30,10 +30,10 @@ class VideoConfService extends BaseService
      * @param $video_valid_time
      * @return array
      */
-    static function addEditVideoConf($accesskey_id, $accesskey_secret, $video_valid_time)
+    static function addEditVideoConf($accesskey_id, $accesskey_secret, $video_valid_time,$local_cover)
     {
         $videoConfTable = new VideoConfModel;
-        $getCheckData = $videoConfTable::CheckData($accesskey_id, $accesskey_secret, $video_valid_time);
+        $getCheckData = $videoConfTable::CheckData($accesskey_id, $accesskey_secret, $video_valid_time,$local_cover);
         if (!$getCheckData['status']) return $getCheckData;
         $videoConfFind = $videoConfTable->find();
         if ($videoConfFind) {

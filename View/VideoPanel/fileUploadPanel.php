@@ -6,7 +6,8 @@
     <div id="app" style="" v-cloak>
         <div>
             <el-container style="height: 550px; border: 1px solid #eee;">
-                <el-aside width="300px"
+
+                <el-aside v-if="is_group == '1'" width="300px"
                           style="background-color: #fff;border-right:1px solid #eee;height: 100%;overflow: hidden;position: relative">
                     <div style="overflow: auto;height: 480px;border-bottom: 1px solid #eee">
                         <template v-for="(item,index) in cate_list">
@@ -63,7 +64,7 @@
                                 <div style="position: absolute;bottom: 0;background-color: #f0f0f0;width: 142px;text-align: center;overflow: hidden">
                                     <span>{{item.filename}}</span>
                                 </div>
-                                <i class="el-icon-error" @click="delVideoListItme(item)"></i>
+                                <i v-if="is_delete == '1'" class="el-icon-error" @click="delVideoListItme(item)"></i>
                                 <div v-if="type >0 ? isSelect ==  item.video_id: item.is_select " class="is_check"
                                      @click="selectImgEvent(index)">
                                     <span style="line-height: 142px;" class="el-icon-check"></span>
@@ -90,7 +91,7 @@
                         <el-button type="success" @click="start_move = false" v-show="start_move" style="width: 120px;">
                             取消移动分组
                         </el-button>
-                        <el-button type="success" @click="moveGroup" v-show="!start_move" style="width: 120px;">开始移动分组
+                        <el-button v-if="is_group == 1" type="success" @click="moveGroup" v-show="!start_move" style="width: 120px;">开始移动分组
                         </el-button>
                         <el-button type="primary" @click="confirm">确定</el-button>
                         <el-button type="default" @click="closePanel">取消</el-button>
@@ -112,8 +113,8 @@
                 data: {
                     pagination: {
                         page: 1,
-                        limit: 10,
-                        total_pages: 0,
+                        limit: 20,
+                        total_pages: 1,
                         total_items: 0
                     },
                     galleryList: [], //视频列表
@@ -123,7 +124,9 @@
                     orgin_type: 1, //选择进入的类型
                     selectedCate: '', //分类的分组
                     cate_list: [],  //分类列表
-                    start_move: false  //是否显示分类分组
+                    start_move: false,  //是否显示分类分组
+                    is_group : "{$_GET['is_group']}",
+                    is_delete: "{$_GET['is_delete']}"
                 },
                 watch: {},
                 computed: {},
@@ -227,7 +230,7 @@
                             success: function (res) {
                                 var data = res.data;
                                 that.pagination.page = data.page;
-                                that.pagination.limit = data.videoGroupList;
+                                that.pagination.limit = data.limit;
                                 that.pagination.total_pages = data.total_pages;
                                 that.pagination.total_items = data.total_items;
                                 $('#cate_ids').val(that.cate_id);
@@ -382,6 +385,9 @@
                     }
                 },
                 mounted: function () {
+
+                    //根据是否使用分组类决定页码
+                    if(this.is_group == 1) this.pagination.limit = 14; else this.pagination.limit = 18;
                     //校验配置
                     this.checkConf();
                     //触发分组的效果

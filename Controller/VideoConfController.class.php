@@ -31,7 +31,10 @@ class VideoConfController extends AdminBase
         $accesskey_id = I('accesskey_id','','trim');
         $accesskey_secret = I('accesskey_secret','','trim');
         $video_valid_time = I('video_valid_time','','trim');
-        $res = VideoConfService::addEditVideoConf($accesskey_id,$accesskey_secret,$video_valid_time);
+        $local_cover = I('local_cover','','trim');
+        $res = VideoConfService::addEditVideoConf(
+            $accesskey_id,$accesskey_secret,
+            $video_valid_time,$local_cover);
         $this->ajaxReturn($res);
     }
 

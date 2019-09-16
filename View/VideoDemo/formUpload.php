@@ -71,10 +71,13 @@
                     },
                     uploadAliyunVideo:function () {
                         //type 的字段可自行添加或编辑
+                        var url = "{:U('Aliyunvideo/VideoPanel/fileUploadPanel',['type'=>1])}";
+                        url += "&is_group=1";  //是否开启分组功能 1为开启
+                        url += "&is_delete=1"; //是否开启删除功能 1为开启
                         layer.open({
                             type: 2,
                             title: '选择使用视频',
-                            content: "{:U('Aliyunvideo/VideoPanel/fileUploadPanel',['type'=>1])}",
+                            content: url,
                             area: ['80%', '595px;']
                         })
                     },

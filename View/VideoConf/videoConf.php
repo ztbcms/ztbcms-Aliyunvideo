@@ -20,6 +20,11 @@
                                 <el-input type="number" placeholder="天" v-model="form.video_valid_time"></el-input>
                             </el-form-item>
 
+                            <el-form-item label="是否将图标保存到本地">
+                                <el-switch v-model="form.local_cover" active-value="1" inactive-value="0"></el-switch>
+                                <span>（使用线上的缩略图会有有效期的问题）</span>
+                            </el-form-item>
+
                             <el-form-item>
                                 <el-button type="primary" @click="onSubmit">保存成功</el-button>
                             </el-form-item>
@@ -45,7 +50,8 @@
                     form: {
                         accesskey_id: '{$videoConf.accesskey_id}',
                         accesskey_secret: '{$videoConf.accesskey_secret}',
-                        video_valid_time: '{$videoConf.video_valid_time}'
+                        video_valid_time: '{$videoConf.video_valid_time}',
+                        local_cover: '{$videoConf.local_cover}'
                     }
                 },
                 watch: {},

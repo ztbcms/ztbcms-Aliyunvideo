@@ -17,4 +17,7 @@ class VideoDetailsModel extends RelationModel
     const ALIYUN_YES = 1;  //上传并视频并成功
     const ALIYUN_NO = 0;   //获取了凭证并上传视频
 
+    const LOCAL_COVER_YES = 1; //将视频保存到本地
+    const LOCAL_COVER_NO = 0;  //不将视频保存到本地
+
 }

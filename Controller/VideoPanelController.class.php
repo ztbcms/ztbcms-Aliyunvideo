@@ -37,8 +37,8 @@ class VideoPanelController extends AdminBase
         $where = [];
         $group_id = I('group_id','','trim');
         $where['group_id'] = $group_id;
-        $page = I('page','','trim');
-        $limit = I('limit','','trim');
+        $page = I('page','1','trim');
+        $limit = I('limit','15','trim');
         $where['is_aliyun'] = '1';
         $where['cover_url'] = ['neq',''];
         $where['is_delete'] = '0';
