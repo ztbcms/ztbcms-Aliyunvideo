@@ -457,7 +457,12 @@
             $.post("{:U('VideoDemo/aliyunVideoPlay')}", {
                 "video_id": video_id
             }).success(function (data) {
-                var res = $.parseJSON(data);
+                console.log(typeof (data));
+                if(typeof (data) == 'object'){
+                    var res = data;
+                } else {
+                    var res = $.parseJSON(data);
+                }
                 if (res.status) {
                     $("#plan").css("width", (100.00).toFixed(2) + "%");
                     $("#numPercentage").text(100);
