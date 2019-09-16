@@ -385,9 +385,8 @@
                     }
                 },
                 mounted: function () {
-
                     //根据是否使用分组类决定页码
-                    if(this.is_group == 1) this.pagination.limit = 14; else this.pagination.limit = 18;
+                    if(this.is_group == 1) this.pagination.limit = 12; else this.pagination.limit = 16;
                     //校验配置
                     this.checkConf();
                     //触发分组的效果
